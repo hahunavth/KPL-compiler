@@ -77,7 +77,7 @@ Token *readIdentKeyword(void)
   // printf("[%s] AS [%d]  -End readIdentKeyword\n", kw, checkKeyword(kw));
 
   TokenType tt = checkKeyword(kw);
-  printf("%s, %d\n", kw, tt);
+  // printf("%s, %d\n", kw, tt);
   if (tt == TK_NONE)
   {
     tt = TK_IDENT;
@@ -508,8 +508,6 @@ int scan(char *fileName)
 
 main(int argc, char *argv[])
 {
-  printf("STARt\n");
-  // openInputStream(argv[1]);
   if (argc > 1)
   {
     printf("%d", scan(argv[1]));
@@ -519,8 +517,7 @@ main(int argc, char *argv[])
     printf("Can truyen tham so");
   }
 
-  // return -1;
-  //  getch();
+  return 0;
 }
 
 // return 0;
