@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 // #include <conio.h>
 #include "reader.h"
 #include "charcode.h"
@@ -22,22 +23,97 @@ extern CharCode charCodes[];
 
 void skipBlank()
 {
-  // TODO
+  while (currentChar != EOF && charCodes[currentChar] != CHAR_SPACE)
+    readChar();
+  printf("Current text after Skip blank %c", currentChar);
 }
 
 void skipComment()
 {
-  // TODO
+  // (* content *)
+
+  while (1) {
+    readChar();
+
+    if(currentChar == EOF) {
+      // NOTE: if comment end with EOF -> throw error and exit
+      error(ERR_ENDOFCOMMENT, lineNo, colNo);
+    } else if (charCodes[currentChar] == CHAR_TIMES) {  // next char is *
+      readChar();
+
+      if(currentChar == EOF) {
+        error(ERR_ENDOFCOMMENT, lineNo, colNo);
+      } else if (charCodes[currentChar] == CHAR_RPAR) {
+        readChar();
+        return;
+      }
+    }
+
+  }
+
+  // int mark = 0;
+  // while (currentChar != EOF || mark != 2)
+  // {
+  //   readChar();
+  //   if (charCodes[currentChar] == CHAR_TIMES)
+  //   {
+  //     mark = 1;
+  //     printf("mark");
+  //   }
+  //   else if (
+  //       charCodes[currentChar] == CHAR_RPAR && mark == 1)
+  //   {
+  //     printf("break\n");
+  //     readChar();
+  //     return;
+  //   }
+  //   else
+  //   {
+  //     mark = 0;
+  //   }
+  // }
+  // if (currentChar != EOF)
+  //   readChar();
+  printf('Skip comment');
 }
 
 Token *readIdentKeyword(void)
 {
-  // TODO
+  int ln = lineNo, cn = colNo;
+  char kw[1000] = "";
+  int i = 0;
+  while (charCodes[currentChar] == CHAR_LETTER || charCodes[currentChar] == CHAR_DIGIT)
+  {
+    // strcat(kw, currentChar);
+    // strchr(kw, currentChar);
+    kw[i] = currentChar;
+    // printf("%s", kw);
+    // printf("%c", currentChar);
+    readChar();
+    i++;
+  }
+  // readChar();
+  printf("[%s] AS [%d]  -End readIdentKeyword\n", kw, checkKeyword(kw));
+  TokenType tt = checkKeyword(kw);
+  if (tt == TK_NONE)
+  {
+    tt = TK_IDENT;
+  }
+  Token *t = makeToken(tt, ln, cn);
+  return t;
 }
 
 Token *readNumber(void)
 {
-  // TODO
+  int ln = lineNo, cn = colNo;
+  int isNumber = 0;
+  while (charCodes[currentChar] == CHAR_DIGIT)
+  {
+    readChar();
+  }
+
+  readChar();
+  return makeToken(KW_INTEGER, ln, cn);
 }
 
 Token *readConstChar(void)
@@ -52,6 +128,11 @@ Token *getToken(void)
 
   if (currentChar == EOF)
     return makeToken(TK_EOF, lineNo, colNo);
+
+  // printf("--%d--\n", charCodes[currentChar]);
+  printf("..%c..\n", currentChar);
+
+  // printf("--getToken \n");
 
   switch (charCodes[currentChar])
   {
@@ -69,8 +150,30 @@ Token *getToken(void)
     // ....
     // TODO
     // ....
+  case CHAR_SEMICOLON:
+    readChar();
+    return makeToken(SB_SEMICOLON, lineNo, colNo);
+  case CHAR_LPAR:
+    readChar();
+    if (charCodes[currentChar] == CHAR_TIMES)
+    {
+      printf("Handle Comment\n");
+      skipComment();
+      printf("Handle Comment END\n");
+      return getToken();
+    }
+  // else
+  //   printf("Handle LPar");
+  // // if (currentChar != EOF)
+  // // readChar();
+  // return getToken();
+  // case CHAR_UNKNOWN:
+  //   printf("%c", currentChar);
+  //   return getToken();
   default:
+    printf("default: %c\n", currentChar);
     token = makeToken(TK_NONE, lineNo, colNo);
+    // printToken(token);
     error(ERR_INVALIDSYMBOL, lineNo, colNo);
     readChar();
     return token;
@@ -231,24 +334,42 @@ int scan(char *fileName)
     return IO_ERROR;
 
   token = getToken();
+  printToken(token);
+  printf(":%d:", token->tokenType);
+  // token = getToken();
+  // printToken(token);
+  // printf(":%d:", token->tokenType);
+
   while (token->tokenType != TK_EOF)
   {
+    // i++;
+    // printf("While not end");
     printToken(token);
     free(token);
     token = getToken();
+    // if (i > 5)
+    //   break;
   }
 
-  free(token);
-  closeInputStream();
-  return IO_SUCCESS;
+  // free(token);
+  // closeInputStream();
+  // return IO_SUCCESS;
 }
 
 /******************************************************************/
 
-main()
+main(int argc, char *argv[])
 {
-
-  openInputStream();
+  printf("STARt\n");
+  // openInputStream(argv[1]);
+  if (argc > 1)
+  {
+    printf("%d", scan(argv[1]));
+  }
+  else
+  {
+    printf("Can truyen tham so");
+  }
 
   // return -1;
   //  getch();

@@ -11,7 +11,7 @@
 #define IO_SUCCESS 1
 
 int readChar(void);
-openInputStream();
+openInputStream(char *fileName);
 void closeInputStream(void);
 
 #endif
