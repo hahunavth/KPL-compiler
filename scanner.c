@@ -31,24 +31,31 @@ void skipBlank()
 void skipComment()
 {
   // (* content *)
-  while (1) {
+  while (1)
+  {
     readChar();
 
-    if(currentChar == EOF) {
+    if (currentChar == EOF)
+    {
       // NOTE: if comment end with EOF -> throw error and exit
       error(ERR_ENDOFCOMMENT, lineNo, colNo);
-    } else if (charCodes[currentChar] == CHAR_TIMES) {  // next char is *
+    }
+    else if (charCodes[currentChar] == CHAR_TIMES)
+    { // next char is *
       readChar();
 
-      if(currentChar == EOF) {
+      if (currentChar == EOF)
+      {
         error(ERR_ENDOFCOMMENT, lineNo, colNo);
-      } else if (charCodes[currentChar] == CHAR_RPAR) {
+      }
+      else if (charCodes[currentChar] == CHAR_RPAR)
+      {
         readChar();
         return;
       }
     }
   }
-  printf('Skip comment');
+  // printf('Skip comment');
 }
 
 Token *readIdentKeyword(void)
@@ -61,17 +68,21 @@ Token *readIdentKeyword(void)
     kw[i] = currentChar;
     readChar();
     i++;
-    if( i > MAX_IDENT_LEN ) {
+    if (i > MAX_IDENT_LEN)
+    {
       error(ERR_IDENTTOOLONG, ln, cn);
     }
   }
+  kw[i] = '\0';
   // printf("[%s] AS [%d]  -End readIdentKeyword\n", kw, checkKeyword(kw));
 
   TokenType tt = checkKeyword(kw);
-  if(tt == TK_NONE) {
+  printf("%s, %d\n", kw, tt);
+  if (tt == TK_NONE)
+  {
     tt = TK_IDENT;
   }
-  Token *t = makeToken(TK_IDENT, ln, cn);
+  Token *t = makeToken(tt, ln, cn);
   strcpy(t->string, kw);
   return t;
 }
@@ -79,12 +90,14 @@ Token *readIdentKeyword(void)
 Token *readNumber(void)
 {
   int count = 0;
-  Token* token = makeToken(TK_NUMBER, lineNo, colNo);
+  Token *token = makeToken(TK_NUMBER, lineNo, colNo);
 
-  while (charCodes[currentChar] == CHAR_DIGIT) {
-  if (count > 9) {
-    error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
-  }
+  while (charCodes[currentChar] == CHAR_DIGIT)
+  {
+    if (count > 9)
+    {
+      error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
+    }
     token->string[count] = currentChar;
     readChar();
     count++;
@@ -98,48 +111,58 @@ Token *readNumber(void)
 
 Token *readConstChar(void)
 {
-  Token* token = makeToken(TK_CHAR, lineNo, colNo);
+  Token *token = makeToken(TK_CHAR, lineNo, colNo);
 
   readChar();
 
-  if (currentChar == -1) {
+  if (currentChar == -1)
+  {
     error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
-  } else {
-  switch(charCodes[currentChar]) {
-  case CHAR_SINGLEQUOTE:
-    readChar();
-
-    if (charCodes[currentChar] == CHAR_SINGLEQUOTE) {
-        token->string[0] = currentChar;
-        readChar();
-        if (charCodes[currentChar] == CHAR_SINGLEQUOTE) {
-            token->string[1] = '\0';
-            readChar();
-            return token;
-        } else {
-            error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
-        }
-    } else {
-      error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
-    }
-    break;
-  default:
-        token->string[0] = currentChar;
-        readChar();
-
-    switch(charCodes[currentChar]) {
+  }
+  else
+  {
+    switch (charCodes[currentChar])
+    {
     case CHAR_SINGLEQUOTE:
-      token->string[1] = '\0';
-
       readChar();
-      return token;
+
+      if (charCodes[currentChar] == CHAR_SINGLEQUOTE)
+      {
+        token->string[0] = currentChar;
+        readChar();
+        if (charCodes[currentChar] == CHAR_SINGLEQUOTE)
+        {
+          token->string[1] = '\0';
+          readChar();
+          return token;
+        }
+        else
+        {
+          error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
+        }
+      }
+      else
+      {
+        error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
+      }
+      break;
     default:
-      error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
+      token->string[0] = currentChar;
+      readChar();
+
+      switch (charCodes[currentChar])
+      {
+      case CHAR_SINGLEQUOTE:
+        token->string[1] = '\0';
+
+        readChar();
+        return token;
+      default:
+        error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
+        break;
+      }
       break;
     }
-    break;
-  }
-
   }
   return token;
 }
@@ -201,8 +224,9 @@ Token *getToken(void)
   case CHAR_LPAR:
     token = makeToken(TK_NONE, lineNo, colNo);
     readChar();
-// 
-    switch(charCodes[currentChar]) {
+    //
+    switch (charCodes[currentChar])
+    {
     case CHAR_PERIOD:
       token->tokenType = SB_LSEL;
       readChar();
@@ -218,14 +242,15 @@ Token *getToken(void)
       token->tokenType = SB_LPAR;
       return token;
     }
-    // 
+    //
   case CHAR_GT:
     // Token Greater
     token = makeToken(SB_GT, lineNo, colNo);
 
     // If next character is '='
     readChar();
-    if (charCodes[currentChar] == CHAR_EQ) {
+    if (charCodes[currentChar] == CHAR_EQ)
+    {
       // Token is Greater Than
       token->tokenType = SB_GE;
       readChar();
@@ -237,7 +262,8 @@ Token *getToken(void)
 
     // Check next character
     readChar();
-    switch(charCodes[currentChar]) {
+    switch (charCodes[currentChar])
+    {
     case CHAR_EQ:
       // Token Lest Than or Equal
       token->tokenType = SB_LE;
@@ -254,10 +280,13 @@ Token *getToken(void)
 
     // If next character is not '='
     readChar();
-    if (charCodes[currentChar] != CHAR_EQ) {
+    if (charCodes[currentChar] != CHAR_EQ)
+    {
       // it is an invalid token
       error(ERR_INVALIDSYMBOL, token->lineNo, token->colNo);
-    } else {
+    }
+    else
+    {
       // else, it's token Not Equal
       token->tokenType = SB_NEQ;
     }
@@ -268,7 +297,8 @@ Token *getToken(void)
 
     // If next character is Right Parenthesis
     readChar();
-    if (charCodes[currentChar] == CHAR_RPAR) {
+    if (charCodes[currentChar] == CHAR_RPAR)
+    {
       // it is token Right Parenthesis
       token->tokenType = SB_RSEL;
       readChar();
@@ -280,7 +310,8 @@ Token *getToken(void)
 
     // If next character is Equal
     readChar();
-    if (charCodes[currentChar] == CHAR_EQ) {
+    if (charCodes[currentChar] == CHAR_EQ)
+    {
       // it is token Assignment
       token->tokenType = SB_ASSIGN;
       readChar();
