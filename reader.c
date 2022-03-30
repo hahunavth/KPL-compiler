@@ -14,7 +14,7 @@ int currentChar;
 int readChar(void)
 {
   currentChar = getc(inputStream);
-  printf("Read: %c\n", currentChar);
+  // printf("Read: %c\n", currentChar);
   colNo++;
   if (currentChar == '\n')
   {
@@ -24,7 +24,7 @@ int readChar(void)
   return currentChar;
 }
 
-openInputStream(char *fileName)
+int openInputStream(char *fileName)
 {
   inputStream = fopen(fileName, "rt");
   if (inputStream == NULL)
