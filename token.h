@@ -1,4 +1,4 @@
-/* 
+/*
  * @copyright (c) 2008, Hedspi, Hanoi University of Technology
  * @author Huu-Duc Nguyen
  * @version 1.0
@@ -10,23 +10,58 @@
 #define MAX_IDENT_LEN 15
 #define KEYWORDS_COUNT 20
 
-typedef enum {
-  TK_NONE, TK_IDENT, TK_NUMBER, TK_CHAR, TK_EOF,
+typedef enum
+{
+  TK_NONE,   // Đại diện cho một lỗi
+  TK_IDENT,  // Định danh
+  TK_NUMBER, // Số
+  TK_CHAR,   // Hằng ký tự
+  TK_EOF,    // Kết thúc chương trình
 
-  KW_PROGRAM, KW_CONST, KW_TYPE, KW_VAR,
-  KW_INTEGER, KW_CHAR, KW_ARRAY, KW_OF, 
-  KW_FUNCTION, KW_PROCEDURE,
-  KW_BEGIN, KW_END, KW_CALL,
-  KW_IF, KW_THEN, KW_ELSE,
-  KW_WHILE, KW_DO, KW_FOR, KW_TO,
+  KW_PROGRAM,
+  KW_CONST,
+  KW_TYPE,
+  KW_VAR,
+  KW_INTEGER,
+  KW_CHAR,
+  KW_ARRAY,
+  KW_OF,
+  KW_FUNCTION,
+  KW_PROCEDURE,
+  KW_BEGIN,
+  KW_END,
+  KW_CALL,
+  KW_IF,
+  KW_THEN,
+  KW_ELSE,
+  KW_WHILE,
+  KW_DO,
+  KW_FOR,
+  KW_TO,
 
-  SB_SEMICOLON, SB_COLON, SB_PERIOD, SB_COMMA,
-  SB_ASSIGN, SB_EQ, SB_NEQ, SB_LT, SB_LE, SB_GT, SB_GE,
-  SB_PLUS, SB_MINUS, SB_TIMES, SB_SLASH,
-  SB_LPAR, SB_RPAR, SB_LSEL, SB_RSEL
-} TokenType; 
+  SB_SEMICOLON, // SB: ;
+  SB_COLON,     // SB: :
+  SB_PERIOD,    // SB: .
+  SB_COMMA,     // SB: ,
+  SB_ASSIGN,    // SB: :=
+  SB_EQ,        // SB: =
+  SB_NEQ,       // SB: !=
+  SB_LT,        // SB: <
+  SB_LE,        // SB: <=
+  SB_GT,        // SB: >
+  SB_GE,        // SB: >=
+  SB_PLUS,      // SB: +
+  SB_MINUS,     // SB: -
+  SB_TIMES,     // SB: *
+  SB_SLASH,     // SB: /
+  SB_LPAR,      // SB: (
+  SB_RPAR,      // SB: )
+  SB_LSEL,      // SB: ??? (.
+  SB_RSEL       // SB: ??? .)
+} TokenType;
 
-typedef struct {
+typedef struct
+{
   char string[MAX_IDENT_LEN + 1];
   int lineNo, colNo;
   TokenType tokenType;
@@ -34,7 +69,6 @@ typedef struct {
 } Token;
 
 TokenType checkKeyword(char *string);
-Token* makeToken(TokenType tokenType, int lineNo, int colNo);
-
+Token *makeToken(TokenType tokenType, int lineNo, int colNo);
 
 #endif
