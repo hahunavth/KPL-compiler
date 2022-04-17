@@ -25,23 +25,28 @@ void skipBlank()
 {
   while (currentChar != EOF && charCodes[currentChar] == CHAR_SPACE)
     readChar();
-  // printf("Current text after Skip blank %c", currentChar);
+  // printf("SKIP BLANK %c", currentChar);
 }
 
+/**
+ *   (* comment *)
+ */
 void skipComment()
 {
-  // (* content *)
   while (1)
   {
     readChar();
 
+    /**
+     * if end of file -> error
+     * if next char is *) -> break
+     */
     if (currentChar == EOF)
     {
-      // NOTE: if comment end with EOF -> throw error and exit
       error(ERR_ENDOFCOMMENT, lineNo, colNo);
     }
     else if (charCodes[currentChar] == CHAR_TIMES)
-    { // next char is *
+    {
       readChar();
 
       if (currentChar == EOF)
@@ -75,9 +80,9 @@ Token *readIdentKeyword(void)
   }
   kw[i] = '\0';
   // printf("[%s] AS [%d]  -End readIdentKeyword\n", kw, checkKeyword(kw));
-
   TokenType tt = checkKeyword(kw);
   // printf("%s, %d\n", kw, tt);
+  // NOTE: check if TK_NONE -> TK_INDENT
   if (tt == TK_NONE)
   {
     tt = TK_IDENT;
@@ -103,6 +108,7 @@ Token *readNumber(void)
     count++;
   }
 
+  // END OF NUMBER
   token->string[count] = '\0';
   token->value = atoi(token->string);
 
@@ -113,9 +119,9 @@ Token *readConstChar(void)
 {
   Token *token = makeToken(TK_CHAR, lineNo, colNo);
 
+  // NOTE: FIRST CHAR IS ' -> READ NEXT CHAR
   readChar();
-
-  if (currentChar == -1)
+  if (currentChar == EOF)
   {
     error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
   }
@@ -170,11 +176,10 @@ Token *readConstChar(void)
 Token *getToken(void)
 {
   Token *token;
-  int ln, cn;
+  int ln = lineNo, cn = colNo;
 
   if (currentChar == EOF)
     return makeToken(TK_EOF, lineNo, colNo);
-
   // printf("..%c..\n", currentChar);
 
   switch (charCodes[currentChar])
@@ -186,12 +191,11 @@ Token *getToken(void)
     return readIdentKeyword();
   case CHAR_DIGIT:
     return readNumber();
+  // operator
   case CHAR_PLUS:
     token = makeToken(SB_PLUS, lineNo, colNo);
     readChar();
     return token;
-    // NOTE
-
   case CHAR_MINUS:
     token = makeToken(SB_MINUS, lineNo, colNo);
     readChar();
@@ -204,6 +208,7 @@ Token *getToken(void)
     token = makeToken(SB_SLASH, lineNo, colNo);
     readChar();
     return token;
+
   case CHAR_EQ:
     token = makeToken(SB_EQ, lineNo, colNo);
     readChar();
@@ -221,10 +226,15 @@ Token *getToken(void)
     token = makeToken(SB_RPAR, lineNo, colNo);
     readChar();
     return token;
+  /**
+   * CURRENT_CHAR: (
+   * - NEXT_CHAR: *
+   * - NEXT_CHAR: .
+   * - NEXT_CHAR: ' '
+   */
   case CHAR_LPAR:
     token = makeToken(TK_NONE, lineNo, colNo);
     readChar();
-    //
     switch (charCodes[currentChar])
     {
     case CHAR_PERIOD:
@@ -242,11 +252,14 @@ Token *getToken(void)
       token->tokenType = SB_LPAR;
       return token;
     }
-    //
-  case CHAR_GT:
-    // Token Greater
-    token = makeToken(SB_GT, lineNo, colNo);
 
+  /**
+   * CURRENT_CHAR: >
+   * - NEXT_CHAR: =
+   * - ELSE
+   */
+  case CHAR_GT:
+    token = makeToken(SB_GT, lineNo, colNo);
     // If next character is '='
     readChar();
     if (charCodes[currentChar] == CHAR_EQ)
@@ -256,6 +269,11 @@ Token *getToken(void)
       readChar();
     }
     return token;
+  /**
+   * CURRENT_CHAR: <
+   * - NEXT_CHAR: =
+   * - ELSE
+   */
   case CHAR_LT:
     // Empty token
     token = makeToken(TK_NONE, lineNo, colNo);
@@ -274,6 +292,11 @@ Token *getToken(void)
       token->tokenType = SB_LT;
       return token;
     }
+  /**
+   * CURRENT_CHAR: !
+   * - NEXT_CHAR: =
+   * - ELSE throw error
+   */
   case CHAR_EXCLAMATION:
     // Make empty token
     token = makeToken(TK_NONE, lineNo, colNo);
@@ -287,10 +310,10 @@ Token *getToken(void)
     }
     else
     {
-      // else, it's token Not Equal
       token->tokenType = SB_NEQ;
     }
     return token;
+
   case CHAR_PERIOD:
     // Token Period
     token = makeToken(SB_PERIOD, lineNo, colNo);
@@ -339,6 +362,7 @@ void printToken(Token *token)
 
   switch (token->tokenType)
   {
+  // NOTE: HANDLE TOKEN
   case TK_NONE:
     printf("TK_NONE\n");
     break;
@@ -484,7 +508,7 @@ int scan(char *fileName)
     return IO_ERROR;
 
   token = getToken();
-  printToken(token);
+  // printToken(token);
   // printf(":%d:", token->tokenType);
   // token = getToken();
   // printToken(token);
@@ -492,8 +516,6 @@ int scan(char *fileName)
 
   while (token->tokenType != TK_EOF)
   {
-    // i++;
-    // printf("While not end");
     printToken(token);
     free(token);
     token = getToken();
@@ -504,7 +526,9 @@ int scan(char *fileName)
   return IO_SUCCESS;
 }
 
-/******************************************************************/
+/**
+ * ================================================================
+ */
 
 int main(int argc, char *argv[])
 {
