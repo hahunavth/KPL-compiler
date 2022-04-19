@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 // #include <conio.h>
 #include "reader.h"
 #include "charcode.h"
@@ -62,7 +63,17 @@ void skipComment()
   }
   // printf('Skip comment');
 }
-
+/**
+ * @brief Định danh / từ khóa:
+ *
+ * - Bất đầu: chữ ( đã check trong getToken )
+ * - Độ dài: <= 15
+ * - Phân biệt hoa / thường:
+ *    + Từ khóa: k ( checkKeyword k phân biệt hoa / thường )
+ *    + Định danh: có
+ *
+ * @return Token*
+ */
 Token *readIdentKeyword(void)
 {
   int ln = lineNo, cn = colNo;
@@ -92,6 +103,13 @@ Token *readIdentKeyword(void)
   return t;
 }
 
+/**
+ * @brief: Số:
+ * - Nguyên k âm
+ * - lỗi: Number too long khi > INT_MAX
+ *
+ * DONE
+ */
 Token *readNumber(void)
 {
   int count = 0;
@@ -99,7 +117,7 @@ Token *readNumber(void)
 
   while (charCodes[currentChar] == CHAR_DIGIT)
   {
-    if (count > 9)
+    if (count > 10)
     {
       error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
     }
@@ -112,64 +130,76 @@ Token *readNumber(void)
   token->string[count] = '\0';
   token->value = atoi(token->string);
 
+  // printf("INT_MAX: %d\n", INT_MAX);
+  // printf("ITEM:    %ld\n", atol(token->string));
+  // printf("ITEM_STR:%s\n", token->string);
+
+  // HANDLE NUMBER > INT_MAX
+  if (count == 10 && atol(token->string) > INT_MAX)
+  {
+    error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
+  }
+
   return token;
 }
 
+/**
+ * @brief Hằng ký tự
+ *
+ * - Bất đầu: ký tự '
+ * - Kết thúc: ký tự '
+ * - NOTE: ký tự /' = '
+ *         /x -> lỗi
+ *
+ * @return Token*
+ */
 Token *readConstChar(void)
 {
   Token *token = makeToken(TK_CHAR, lineNo, colNo);
+  // NOTE: currentChar = '\'';
+  int count = 0;
 
-  // NOTE: FIRST CHAR IS ' -> READ NEXT CHAR
-  readChar();
-  if (currentChar == EOF)
+  while (1)
   {
-    error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
-  }
-  else
-  {
-    switch (charCodes[currentChar])
+    readChar();
+    // printf("current char: %d %d\n", currentChar == '\'', '\'');
+    if (currentChar == '\'')
     {
-    case CHAR_SINGLEQUOTE:
       readChar();
-
-      if (charCodes[currentChar] == CHAR_SINGLEQUOTE)
+      break;
+    }
+    // handle /'
+    else if (charCodes[currentChar] == CHAR_SLASH)
+    {
+      readChar();
+      if (currentChar == EOF)
       {
-        token->string[0] = currentChar;
-        readChar();
-        if (charCodes[currentChar] == CHAR_SINGLEQUOTE)
-        {
-          token->string[1] = '\0';
-          readChar();
-          return token;
-        }
-        else
-        {
-          error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
-        }
+        error(ERR_INVALIDCHARCONSTANT, lineNo, colNo);
+      }
+      else if (charCodes[currentChar] == CHAR_SINGLEQUOTE)
+      {
+        token->string[count] = currentChar;
+        count++;
       }
       else
       {
-        error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
+        // Ko phai \' -> loi
+        error(ERR_INVALIDCHARCONSTANT, lineNo, colNo);
       }
-      break;
-    default:
-      token->string[0] = currentChar;
-      readChar();
-
-      switch (charCodes[currentChar])
-      {
-      case CHAR_SINGLEQUOTE:
-        token->string[1] = '\0';
-
-        readChar();
-        return token;
-      default:
-        error(ERR_INVALIDCHARCONSTANT, token->lineNo, token->colNo);
-        break;
-      }
-      break;
+    }
+    // handle end of char
+    else if (currentChar == EOF)
+    {
+      error(ERR_ENDOFCOMMENT, lineNo, colNo);
+    }
+    else
+    {
+      token->string[count] = currentChar;
+      count++;
     }
   }
+
+  token->string[count] = '\0';
   return token;
 }
 

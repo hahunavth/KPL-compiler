@@ -24,7 +24,7 @@ typedef enum
   CHAR_PERIOD,      // CHAR: .
   CHAR_COLON,       // CHAR: :
   CHAR_SEMICOLON,   // CHAR: ;
-  CHAR_SINGLEQUOTE, /* CHAR: \ */
+  CHAR_SINGLEQUOTE, /* CHAR: ' */
   CHAR_LPAR,        // CHAR: (
   CHAR_RPAR,        // CHAR: )
   CHAR_UNKNOWN      // CHAR: ???

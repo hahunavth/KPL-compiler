@@ -1,4 +1,4 @@
-/* 
+/*
  * @copyright (c) 2008, Hedspi, Hanoi University of Technology
  * @author Huu-Duc Nguyen
  * @version 1.0
@@ -23,7 +23,7 @@ typedef enum
 #define ERM_INVALIDCHARCONSTANT "Invalid const char!"
 #define ERM_INVALIDSYMBOL "Invalid symbol!"
 // REVIEW
-#define ERR_INVALIDNUMVER "Number too long!"
+#define ERM_NUMBERTOOLONG "Number too long!"
 
 void error(ErrorCode err, int lineNo, int colNo);
 
