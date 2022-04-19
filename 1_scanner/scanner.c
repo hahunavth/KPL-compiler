@@ -108,7 +108,7 @@ Token *readIdentKeyword(void)
  * - Nguyên k âm
  * - lỗi: Number too long khi > INT_MAX
  *
- * DONE
+ * @return Token*
  */
 Token *readNumber(void)
 {
@@ -148,7 +148,8 @@ Token *readNumber(void)
  *
  * - Bất đầu: ký tự '
  * - Kết thúc: ký tự '
- * - NOTE: ký tự /' = '
+ * - NOTE: ký tự \' = '
+ *         ký tự \\ = \
  *         /x -> lỗi
  * - NOTE: Chưa check string length
  *
@@ -164,27 +165,27 @@ Token *readConstChar(void)
   {
     readChar();
     // printf("current char: %d %d\n", currentChar == '\'', '\'');
-    if (currentChar == '\'')
+    if (charCodes[currentChar] == CHAR_SINGLEQUOTE)
     {
       readChar();
       break;
     }
-    // handle /'
-    else if (charCodes[currentChar] == CHAR_SLASH)
+    // handle \'
+    else if (currentChar == '\\')
     {
       readChar();
       if (currentChar == EOF)
       {
         error(ERR_INVALIDCHARCONSTANT, lineNo, colNo);
       }
-      else if (charCodes[currentChar] == CHAR_SINGLEQUOTE)
+      else if (charCodes[currentChar] == CHAR_SINGLEQUOTE || currentChar == '\\')
       {
         token->string[count] = currentChar;
         count++;
       }
       else
       {
-        // Ko phai \' -> loi
+        // Ko phai \' hoac \\ -> loi
         error(ERR_INVALIDCHARCONSTANT, lineNo, colNo);
       }
     }

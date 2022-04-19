@@ -9,7 +9,7 @@ Program Example2;
  *)
    
 Var n : Integer;
-Var a : String = 'a/'bs';
+Var a : String = 'abs';
 Function F(n : Integer) : Integer;
   Begin
     If n = 0 Then F := 1 Else F := N * F (N - 1);
