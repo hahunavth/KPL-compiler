@@ -150,6 +150,7 @@ Token *readNumber(void)
  * - Kết thúc: ký tự '
  * - NOTE: ký tự /' = '
  *         /x -> lỗi
+ * - NOTE: Chưa check string length
  *
  * @return Token*
  */
