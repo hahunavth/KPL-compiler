@@ -67,7 +67,7 @@ void skipComment()
  * @brief Định danh / từ khóa:
  *
  * - Bất đầu: chữ ( đã check trong getToken )
- * - Độ dài: <= 15
+ * - Độ dài: <= 15 -> chi lay 15 ky tu
  * - Phân biệt hoa / thường:
  *    + Từ khóa: k ( checkKeyword k phân biệt hoa / thường )
  *    + Định danh: có
@@ -81,12 +81,18 @@ Token *readIdentKeyword(void)
   int i = 0;
   while (charCodes[currentChar] == CHAR_LETTER || charCodes[currentChar] == CHAR_DIGIT)
   {
-    kw[i] = currentChar;
-    readChar();
-    i++;
-    if (i > MAX_IDENT_LEN)
+    if (i < MAX_IDENT_LEN)
     {
-      error(ERR_IDENTTOOLONG, ln, cn);
+      kw[i] = currentChar;
+      readChar();
+      i++;
+      // break;
+      // error(ERR_IDENTTOOLONG, ln, cn);
+    }
+    else
+    {
+      readChar();
+      // printf("%c", currentChar);
     }
   }
   kw[i] = '\0';
@@ -150,7 +156,7 @@ Token *readNumber(void)
  * - Kết thúc: ký tự '
  * - NOTE: ký tự \' = '
  *         ký tự \\ = \
- *         /x -> lỗi
+ *         \x -> lỗi
  * - NOTE: Chưa check string length
  *
  * @return Token*
@@ -192,7 +198,7 @@ Token *readConstChar(void)
     // handle end of char
     else if (currentChar == EOF)
     {
-      error(ERR_ENDOFCOMMENT, lineNo, colNo);
+      error(ERR_INVALIDCHARCONSTANT, lineNo, colNo);
     }
     else
     {
