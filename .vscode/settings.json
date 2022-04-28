@@ -2,5 +2,27 @@
   "files.associations": {
     "error.h": "c",
     "charcode.h": "c"
-  }
+  },
+  "cSpell.words": [
+    "biet",
+    "Chưa",
+    "danh",
+    "Dinh",
+    "Định",
+    "duoc",
+    "ENDOFCOMMENT",
+    "hoac",
+    "khong",
+    "luat",
+    "phai",
+    "phan",
+    "Thay",
+    "thich",
+    "thúc",
+    "thuong",
+    "trong",
+    "trung",
+    "vung",
+    "vuot"
+  ]
 }

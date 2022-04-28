@@ -25,6 +25,7 @@ set ( PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include )
 # Subprojects
 add_subdirectory(1_scanner)
 add_subdirectory(1.2_scanner)
+# add_subdirectory(2_parser)
 
 # target_link_libraries(scanner ${PROJECT_NAME}_1_scanner)
 # target_link_libraries(scanner kpl_scanner)

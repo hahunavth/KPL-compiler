@@ -1,0 +1,5 @@
+FUNCTION binhphuong ( x: integer ) : integer ;
+BEGIN
+	binhphuong := x*x	(* return *)
+END
+;

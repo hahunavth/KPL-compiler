@@ -1,0 +1,5 @@
+PROGRAM assignment;
+
+function calc : integer;
+
+ARRAY(.5.) OF ARRAY (.10.) OF integer;

@@ -1,0 +1,10 @@
+program sum;
+
+var x: integer; y: integer;
+
+begin
+  call ReadI(x);
+  call ReadI(y);
+  call WriteI( x + y )
+end
+.

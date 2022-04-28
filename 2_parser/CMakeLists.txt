@@ -1,0 +1,42 @@
+# cmake_minimum_required(VERSION 3.15)
+
+# project(2_parser VERSION 1.0.1 DESCRIPTION "KPL parser")
+
+# # SHARED LIBRARY
+# add_library(2_parser
+# STATIC
+#     charcode.c
+#     error.c
+#     reader.c
+#     token.c
+#     scanner.c
+#     charcode.h
+#     error.h
+#     reader.h
+#     token.h
+#     scanner.h
+# )
+
+# target_include_directories(2_parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# set_target_properties(2_parser PROPERTIES
+#     VERSION ${PROJECT_VERSION}
+#     SOVERSION 1
+# )
+
+# add_executable(parser parser.c)
+# target_link_libraries(parser PRIVATE 2_parser)
+
+
+cmake_minimum_required(VERSION 3.15)
+
+project(2_parser VERSION 1.0.1 DESCRIPTION "KPL parser")
+
+add_executable(parser parser.c
+    charcode.c
+    error.c
+    reader.c
+    token.c
+    scanner.c
+    main.c
+)
