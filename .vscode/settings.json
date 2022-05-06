@@ -1,7 +1,8 @@
 {
   "files.associations": {
     "error.h": "c",
-    "charcode.h": "c"
+    "charcode.h": "c",
+    "parser.h": "c"
   },
   "cSpell.words": [
     "biet",
@@ -13,9 +14,11 @@
     "ENDOFCOMMENT",
     "hoac",
     "khong",
+    "LSEL",
     "luat",
     "phai",
     "phan",
+    "RSEL",
     "Thay",
     "thich",
     "thúc",
