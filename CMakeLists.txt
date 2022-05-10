@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 # project(kpi_compiler VERSION 0.1.0)
 project(kpi NONE)
 
-# include(CTest)
-# enable_testing()
+include(CTest)
+enable_testing()
 
 # set(CMAKE_C_COMPILER_WORKS 1)
 # set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")

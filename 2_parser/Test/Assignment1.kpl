@@ -1,5 +1,35 @@
 PROGRAM assignment;
+(*
+  Bài 1. Một ma trận vuông là ma trận tam giác trên nếu mọi phần tử nằm dưới đường chéo chính là bằng 0.
+    Viết chương trình trên ngôn ngữ KPL để nhập một ma trận vuông kích thước nxn, n nhập từ bàn phím.
+    In ra 1 nếu ma trận là tam giác trên , 0 nếu ngược lại.
+*)
 
-function calc : integer;
+VAR matrix : ARRAY(.5.) OF ARRAY (.5.) OF integer;
+    n : INTEGER;
+    mark: INTEGER;
+  
+BEGIN
+  mark := 1;
+  
+  call Print('n');
+  call ReadI(n);
 
-ARRAY(.5.) OF ARRAY (.10.) OF integer;
+  FOR i := 1 TO n DO
+    FOR j := 1 TO n-i DO
+    BEGIN
+      call ReadI(matrix(.i.)(.j.));
+    END;
+
+  FOR i := 1 TO n DO
+    FOR j := 1 TO n-i DO
+      BEGIN
+        IF matrix(.i.)(.j.) != 0 THEN
+          mark := 0;
+      END;
+  
+  IF mark = 1 THEN CALL PRINT(1)
+  ELSE CALL PRINT(0);
+
+END
+.

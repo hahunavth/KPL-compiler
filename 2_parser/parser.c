@@ -394,13 +394,9 @@ void compileStatement(void)
     break;
     // EmptySt needs to check FOLLOW tokens
   case SB_SEMICOLON:
-    // FIXME: CHECK FOLLOW TOKENS
-    eat(SB_SEMICOLON);
     break;
   case KW_END:
-    // eat(KW_END);
   case KW_ELSE:
-    // do nothing
     break;
     // Error occurs
   default:
@@ -488,7 +484,7 @@ void compileWhileSt(void)
   eat(KW_DO);
   compileStatement();
   //
-  assert("While statement pased ....");
+  assert("While statement parsed ....");
 }
 
 void compileForSt(void)
@@ -621,7 +617,7 @@ void compileExpression3(void)
     compileExpression3();
     break;
   default:
-    printf("@@@@@@@@@ @@@@: %d, %d-%d\n", lookAhead->tokenType, lookAhead->lineNo, lookAhead->colNo);
+    // printf("@@@@@@@@@ @@@@: %d, %d-%d\n", lookAhead->tokenType, lookAhead->lineNo, lookAhead->colNo);
     // do nothing
     break;
   }
@@ -631,6 +627,21 @@ void compileTerm(void)
 {
   // TODO
   compileFactor();
+  // NOTE: IF compileTerm2() is not implemented
+  // while (lookAhead->tokenType == SB_TIMES || lookAhead->tokenType == SB_SLASH)
+  // {
+  //   if (lookAhead->tokenType == SB_TIMES)
+  //   {
+  //     eat(SB_TIMES);
+  //     compileFactor();
+  //   }
+  //   else
+  //   {
+  //     eat(SB_SLASH);
+  //     compileFactor();
+  //   }
+  // }
+  // or
   compileTerm2();
 }
 
@@ -649,7 +660,26 @@ void compileTerm2(void)
     compileFactor();
     compileTerm2();
     break;
+  case SB_PLUS:
+  case SB_MINUS:
+  case KW_TO:
+  case KW_DO:
+  case SB_RPAR:
+  case SB_COMMA:
+  case SB_EQ:
+  case SB_NEQ:
+  case SB_LE:
+  case SB_LT:
+  case SB_GE:
+  case SB_GT:
+  case SB_RSEL:
+  case SB_SEMICOLON:
+  case KW_END:
+  case KW_ELSE:
+  case KW_THEN:
+    break;
   default:
+    error(ERR_INVALIDTERM, lookAhead->lineNo, lookAhead->colNo);
     // do nothing
     break;
   }
@@ -662,7 +692,7 @@ void compileFactor(void)
    * FIXED:
    *  86) <Factor> ::= <UnsignedConstant>
    *  87) <Factor> ::= <Variable>
-   *  88) <Factor> ::= <FunctionApptication>
+   *  88) <Factor> ::= <FunctionApplication>
    *  89) <Factor> ::= SB_LPAR <Expression> SB_RPAR
    *
    */

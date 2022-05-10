@@ -31,7 +31,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(2_parser VERSION 1.0.1 DESCRIPTION "KPL parser")
-
+enable_testing()
 add_executable(parser parser.c
     charcode.c
     error.c
@@ -40,3 +40,6 @@ add_executable(parser parser.c
     scanner.c
     main.c
 )
+
+add_test(NAME parser
+         COMMAND parser ./2_parser/Test/example3.kpl)
