@@ -1,4 +1,4 @@
-PROGRAM assignment;
+PROGRAM assignment1;
 (*
   Bài 1. Một ma trận vuông là ma trận tam giác trên nếu mọi phần tử nằm dưới đường chéo chính là bằng 0.
     Viết chương trình trên ngôn ngữ KPL để nhập một ma trận vuông kích thước nxn, n nhập từ bàn phím.

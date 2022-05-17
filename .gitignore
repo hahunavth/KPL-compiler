@@ -2,3 +2,5 @@ a.out
 *.o
 b/
 build/
+cmake-build-debug/
+.idea/

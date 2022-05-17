@@ -1,0 +1,8 @@
+program test1;
+
+var a: integer;
+    b: char;
+
+BEGIN
+
+END.

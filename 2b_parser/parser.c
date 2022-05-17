@@ -11,6 +11,25 @@
 #include "parser.h"
 #include "error.h"
 
+/**
+ * 2:
+    Gia su cu phap cua Block4 va Block5 thay doi nhu sau:
+    Block4 ::= FunDecls Block5
+    Block4 ::= Block5
+    Block5 ::= ProcDecls Block6
+    Block5 ::= Block6
+    FunDecls::= FunDecl FunDecls
+    FunDecls::= eps
+    ProcDecls::= ProcDecl  ProcDecls
+    ProcDecls ::= eps
+    Block6 ::= KW_BEGIN Statements KW_END
+    Viet lai cac ham lien quan sao cho phu hop voi tap luat moi.
+ *
+ */
+void compileBlock6(void);
+void compileFuncDecls(void);
+void compileProcDecls(void);
+
 Token *currentToken;
 Token *lookAhead;
 
@@ -85,13 +104,46 @@ void compileBlock3(void)
     compileBlock4();
 }
 
+// NEW:
+//     Block4 ::= FunDecls Block5
+//     Block4 ::= Block5
+//
 void compileBlock4(void)
 {
-  compileSubDecls();
-  compileBlock5();
+  // compileSubDecls();
+  if (lookAhead->tokenType == KW_BEGIN)
+  {
+    compileBlock5();
+  }
+  else
+  {
+    compileFuncDecls();
+    compileBlock5();
+  }
+}
+// NEW:
+//    Block5 ::= ProcDecls Block6
+//    Block5 ::= Block6
+//
+void compileBlock5(void)
+{
+  // eat(KW_BEGIN);
+  // compileStatements();
+  // eat(KW_END);
+  if (lookAhead->tokenType == KW_PROCEDURE)
+  {
+    compileProcDecls();
+    compileBlock6();
+  }
+  else
+  {
+    compileBlock6();
+  }
 }
 
-void compileBlock5(void)
+// NEW:
+//    Block6 ::= KW_BEGIN Statements KW_END
+void compileBlock6(void)
 {
   eat(KW_BEGIN);
   compileStatements();
@@ -107,7 +159,6 @@ void compileConstDecls(void)
 void compileConstDecl(void)
 {
   eat(TK_IDENT);
-  // eat(SB_EQUAL);
   eat(SB_EQ);
   compileConstant();
   eat(SB_SEMICOLON);
@@ -161,6 +212,18 @@ void compileSubDecls(void)
   assert("Subtoutines parsed ....");
 }
 
+// NEW:
+//    FunDecls::= FunDecl FunDecls
+//    FunDecls::= eps
+void compileFuncDecls(void)
+{
+  if (lookAhead->tokenType == KW_FUNCTION)
+  {
+    compileFuncDecl();
+    compileFuncDecls();
+  }
+}
+
 void compileFuncDecl(void)
 {
   assert("Parsing a function ....");
@@ -175,6 +238,18 @@ void compileFuncDecl(void)
   eat(SB_SEMICOLON);
   //
   assert("Function parsed ....");
+}
+
+// NEW:
+//    ProcDecls::= ProcDecl  ProcDecls
+//    ProcDecls ::= eps
+void compileProcDecls(void)
+{
+  if (lookAhead->tokenType == KW_PROCEDURE)
+  {
+    compileProcDecl();
+    compileProcDecls();
+  }
 }
 
 void compileProcDecl(void)

@@ -41,5 +41,15 @@ add_executable(parser parser.c
     main.c
 )
 
-add_test(NAME parser
-         COMMAND parser ./2_parser/Test/example3.kpl)
+add_test(NAME parser_example3
+         COMMAND parser ../Test/example3.kpl)
+add_test(NAME parser_example2
+         COMMAND parser ../Test/example2.kpl)
+add_test(NAME parser_example1
+         COMMAND parser ../Test/example1.kpl)
+
+add_test(NAME parser_sum
+         COMMAND parser ../Test/sum.kpl)
+
+add_test(NAME parser_assignment1
+         COMMAND parser ../Test/Assignment1.kpl)
