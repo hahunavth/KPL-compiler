@@ -2,7 +2,8 @@
   "files.associations": {
     "error.h": "c",
     "charcode.h": "c",
-    "parser.h": "c"
+    "parser.h": "c",
+    "typeinfo": "c"
   },
   "cSpell.words": [
     "biet",

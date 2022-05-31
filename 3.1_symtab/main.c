@@ -19,83 +19,87 @@ int main()
 
   initSymTab();
 
-  // obj = createProgramObject("PRG");
-  // enterBlock(obj->progAttrs->scope);
+  obj = createProgramObject("PRG");
+  enterBlock(obj->progAttrs->scope);
 
-  // obj = createConstantObject("c1");
-  // obj->constAttrs->value = makeIntConstant(10);
-  // declareObject(obj);
+  obj = createConstantObject("c1");
+  obj->constAttrs->value = makeIntConstant(10);
+  declareObject(obj);
 
-  // obj = createConstantObject("c2");
-  // obj->constAttrs->value = makeCharConstant('a');
-  // declareObject(obj);
+  obj = createConstantObject("c2");
+  obj->constAttrs->value = makeCharConstant('a');
+  declareObject(obj);
 
-  // obj = createTypeObject("t1");
-  // obj->typeAttrs->actualType = makeArrayType(10, makeIntType());
-  // declareObject(obj);
+  obj = createTypeObject("t1");
+  obj->typeAttrs->actualType = makeArrayType(10, makeIntType());
+  declareObject(obj);
 
-  // obj = createVariableObject("v1");
-  // obj->varAttrs->type = makeIntType();
-  // declareObject(obj);
+  obj = createVariableObject("v1");
+  obj->varAttrs->type = makeIntType();
+  declareObject(obj);
 
-  // obj = createVariableObject("v2");
-  // obj->varAttrs->type = makeArrayType(10, makeArrayType(10, makeIntType()));
-  // declareObject(obj);
+  obj = createVariableObject("v2");
+  obj->varAttrs->type = makeArrayType(10, makeArrayType(10, makeIntType()));
+  declareObject(obj);
 
-  // obj = createFunctionObject("f");
-  // obj->funcAttrs->returnType = makeIntType();
-  // declareObject(obj);
+  obj = createFunctionObject("f");
+  obj->funcAttrs->returnType = makeIntType();
+  declareObject(obj);
 
-  // enterBlock(obj->funcAttrs->scope);
+  enterBlock(obj->funcAttrs->scope);
 
-  // obj = createParameterObject("p1", PARAM_VALUE, symtab->currentScope->owner);
-  // obj->paramAttrs->type = makeIntType();
-  // declareObject(obj);
+  // printf("%p", obj->funcAttrs->scope);
+  // FIXED: (nil)Setting up watches.
+  // printf("%p", symtab->currentScope->owner);
 
-  // obj = createParameterObject("p2", PARAM_REFERENCE, symtab->currentScope->owner);
-  // obj->paramAttrs->type = makeCharType();
-  // declareObject(obj);
+  obj = createParameterObject("p1", PARAM_VALUE, symtab->currentScope->owner);
+  obj->paramAttrs->type = makeIntType();
+  declareObject(obj);
 
-  // exitBlock();
+  obj = createParameterObject("p2", PARAM_REFERENCE, symtab->currentScope->owner);
+  obj->paramAttrs->type = makeCharType();
+  declareObject(obj);
 
-  // obj = createProcedureObject("p");
-  // declareObject(obj);
+  exitBlock();
 
-  // enterBlock(obj->procAttrs->scope);
+  obj = createProcedureObject("p");
+  declareObject(obj);
 
-  // obj = createParameterObject("v1", PARAM_VALUE, symtab->currentScope->owner);
-  // obj->paramAttrs->type = makeIntType();
-  // declareObject(obj);
+  enterBlock(obj->procAttrs->scope);
 
-  // obj = createConstantObject("c1");
-  // obj->constAttrs->value = makeCharConstant('a');
-  // declareObject(obj);
+  obj = createParameterObject("v1", PARAM_VALUE, symtab->currentScope->owner);
+  obj->paramAttrs->type = makeIntType();
+  declareObject(obj);
 
-  // obj = createConstantObject("c3");
-  // obj->constAttrs->value = makeIntConstant(10);
-  // declareObject(obj);
+  obj = createConstantObject("c1");
+  obj->constAttrs->value = makeCharConstant('a');
+  declareObject(obj);
 
-  // obj = createTypeObject("t1");
-  // obj->typeAttrs->actualType = makeIntType();
-  // declareObject(obj);
+  obj = createConstantObject("c3");
+  obj->constAttrs->value = makeIntConstant(10);
+  declareObject(obj);
 
-  // obj = createTypeObject("t2");
-  // obj->typeAttrs->actualType = makeArrayType(10, makeIntType());
-  // declareObject(obj);
+  obj = createTypeObject("t1");
+  obj->typeAttrs->actualType = makeIntType();
+  declareObject(obj);
 
-  // obj = createVariableObject("v2");
-  // obj->varAttrs->type = makeArrayType(10, makeIntType());
-  // declareObject(obj);
+  obj = createTypeObject("t2");
+  obj->typeAttrs->actualType = makeArrayType(10, makeIntType());
+  declareObject(obj);
 
-  // obj = createVariableObject("v3");
-  // obj->varAttrs->type = makeCharType();
-  // declareObject(obj);
+  obj = createVariableObject("v2");
+  obj->varAttrs->type = makeArrayType(10, makeIntType());
+  declareObject(obj);
 
-  // exitBlock();
+  obj = createVariableObject("v3");
+  obj->varAttrs->type = makeCharType();
+  declareObject(obj);
 
-  // exitBlock();
-  // printObject(symtab->program, 0);
-  // cleanSymTab();
+  exitBlock();
+
+  exitBlock();
+  printObject(symtab->program, 0);
+  cleanSymTab();
 
   return 0;
 }
