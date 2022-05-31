@@ -1,8 +1,19 @@
 program test1;
 
+
 var a: integer;
     b: char;
 
+
+Function F(n : Integer) : Integer;
+  Begin
+    If n = 0 Then F := 1 Else F := N * F (N - 1);
+  End;
+
 BEGIN
+    a := 1;
+    b := 'h';
+
+    call WriteI(a);
 
 END.

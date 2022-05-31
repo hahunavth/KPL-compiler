@@ -107,7 +107,6 @@ void compileConstDecls(void)
 void compileConstDecl(void)
 {
   eat(TK_IDENT);
-  // eat(SB_EQUAL);
   eat(SB_EQ);
   compileConstant();
   eat(SB_SEMICOLON);
@@ -398,8 +397,8 @@ void compileStatement(void)
   case KW_END:
   case KW_ELSE:
     break;
-    // Error occurs
   default:
+    // Error occurs
     error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
     break;
   }

@@ -1,3 +1,8 @@
 Program Example1; (* Example 1 *)
+
+Type a = integer;
+
+Var1 x: integer;
+
 Begin
 End. (* Example 1 *)

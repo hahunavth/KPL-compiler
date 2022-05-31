@@ -26,6 +26,7 @@
     Viet lai cac ham lien quan sao cho phu hop voi tap luat moi.
  *
  */
+
 void compileBlock6(void);
 void compileFuncDecls(void);
 void compileProcDecls(void);
