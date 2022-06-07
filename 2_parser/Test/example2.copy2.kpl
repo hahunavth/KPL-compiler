@@ -1,13 +1,15 @@
-Program Example2; 
-  
-Const c = 1;
+Program Example2;
+
+Const c = +a;
+Type arr = Array (.10.) of Integer;
+     int = Integer;
 Var n : Integer;
 
 Function F(n : Integer) : Integer;
   Begin
     If n = 0 Then F := 1 Else F := N * F (N - 1);
   End;
-
+ 
 Begin
   For n := 1 To 7 Do
     Begin

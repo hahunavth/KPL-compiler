@@ -56,8 +56,8 @@ typedef enum
   SB_SLASH,     // SB: /
   SB_LPAR,      // SB: (
   SB_RPAR,      // SB: )
-  SB_LSEL,      // SB: ??? (.
-  SB_RSEL       // SB: ??? .)
+  SB_LSEL,      // SB: (.
+  SB_RSEL       // SB: .)
 } TokenType;
 
 typedef struct
