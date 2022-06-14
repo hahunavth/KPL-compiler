@@ -49,9 +49,10 @@ Type *duplicateType(Type *type)
   Type *dType = (Type *)malloc(sizeof(Type));
   dType->typeClass = type->typeClass;
   dType->arraySize = type->arraySize;
-  if (type->elementType != NULL)
+  if (type->elementType->typeClass != TP_ARRAY)
   {
     dType->elementType = duplicateType(type->elementType);
+    dType->arraySize = type->arraySize;
   }
   return dType;
 }
@@ -96,7 +97,7 @@ void freeType(Type *type)
     freeType(type->elementType);
     free(type);
   }
-  else
+  else if (type->typeClass == TP_INT || type->typeClass == TP_CHAR)
   {
     free(type);
   }
@@ -108,7 +109,7 @@ ConstantValue *makeIntConstant(int i)
 {
   // TODO
   ConstantValue *cv = (ConstantValue *)malloc(sizeof(ConstantValue));
-  cv->charValue = i;
+  cv->intValue = i;
   cv->type = TP_INT;
 
   return cv;
@@ -128,8 +129,15 @@ ConstantValue *duplicateConstantValue(ConstantValue *v)
 {
   // TODO
   ConstantValue *cv = (ConstantValue *)malloc(sizeof(ConstantValue));
-  cv->charValue = v->charValue;
-  cv->type = TP_CHAR;
+  cv->type = v->type;
+  if (v->type == TP_INT)
+  {
+    cv->intValue = v->intValue;
+  }
+  else if (v->type == TP_CHAR)
+  {
+    cv->charValue = v->charValue;
+  }
 
   return cv;
 }
@@ -186,6 +194,7 @@ Object *createVariableObject(char *name)
   strcpy(obj->name, name);
   obj->varAttrs = (VariableAttributes *)malloc(sizeof(VariableAttributes));
   obj->kind = OBJ_VARIABLE;
+  obj->varAttrs->scope = symtab->currentScope;
 
   return obj;
 }
@@ -197,6 +206,7 @@ Object *createFunctionObject(char *name)
   strcpy(func->name, name);
   func->kind = OBJ_FUNCTION;
   func->funcAttrs = (FunctionAttributes *)malloc(sizeof(FunctionAttributes));
+  func->funcAttrs->paramList = NULL;
   func->funcAttrs->scope = createScope(func, symtab->currentScope);
 
   return func;
@@ -206,6 +216,7 @@ Object *createProcedureObject(char *name)
 {
   // TODO
   Object *proc = (Object *)malloc(sizeof(Object));
+  strcpy(proc->name, name);
   proc->kind = OBJ_PROCEDURE;
   proc->procAttrs = (ProcedureAttributes *)malloc(sizeof(ProcedureAttributes));
   proc->procAttrs->paramList = (ObjectNode *)malloc(sizeof(ObjectNode));
@@ -222,17 +233,7 @@ Object *createParameterObject(char *name, enum ParamKind kind, Object *owner)
   parameter->kind = OBJ_PARAMETER;
   parameter->paramAttrs = (ParameterAttributes *)malloc(sizeof(ParameterAttributes));
   parameter->paramAttrs->kind = kind;
-  parameter->paramAttrs->type = (Type *)malloc(sizeof(Type));
-  // parameter->paramAttrs->type->typeClass = TP_INT;
-
-  // if (kind == PARAM_VALUE)
-  // {
-  //   parameter->paramAttrs->type = owner->funcAttrs->returnType;
-  // }
-  // else
-  // {
-  //   parameter->paramAttrs->type = owner->funcAttrs->paramList->paramAttrs->type;
-  // }
+  parameter->paramAttrs->function = owner;
 
   return parameter;
 }
@@ -247,31 +248,31 @@ void freeObject(Object *obj)
     free(obj->constAttrs->value);
     free(obj->constAttrs);
     break;
-  case OBJ_FUNCTION:
-    if (obj->funcAttrs->paramList->next)
-    {
-      freeObject(obj->funcAttrs->paramList->next->object);
-      freeObject(obj->funcAttrs->paramList->next);
-    }
-    freeObject(obj->funcAttrs->paramList->object);
-    freeType(obj->funcAttrs->returnType);
-    free(obj->funcAttrs->scope);
-    free(obj->funcAttrs);
+  case OBJ_TYPE:
+    freeType(obj->typeAttrs->actualType);
+    free(obj->typeAttrs);
+    break;
+  case OBJ_VARIABLE:
+    free(obj->varAttrs);
+    break;
+  case OBJ_PROGRAM:
+    freeScope(obj->progAttrs->scope);
+    free(obj->progAttrs);
     break;
   case OBJ_PARAMETER:
     freeType(obj->paramAttrs->type);
-    freeObject(obj->paramAttrs->function);
-    // TODO: obj->paramAttrs->kind
+    free(obj->paramAttrs);
+    break;
+  case OBJ_FUNCTION:
+    freeReferenceList(obj->funcAttrs->paramList);
+    freeType(obj->funcAttrs->returnType);
+    freeScope(obj->funcAttrs->scope);
+    free(obj->funcAttrs);
     break;
   case OBJ_PROCEDURE:
-    if (obj->procAttrs->paramList->next)
-    {
-      freeObject(obj->procAttrs->paramList->next->object);
-      freeObject(obj->procAttrs->paramList->next);
-    }
-    freeObject(obj->procAttrs->paramList->object);
-    free(obj->procAttrs->scope);
-    free(obj->procAttrs);
+    freeReferenceList(obj->procAttrs->paramList);
+    freeScope(obj->procAttrs->scope);
+    free(obj->funcAttrs);
     break;
   }
 }
@@ -279,16 +280,29 @@ void freeObject(Object *obj)
 void freeScope(Scope *scope)
 {
   // TODO
+  freeObjectList(scope->objList);
+  free(scope);
 }
 
 void freeObjectList(ObjectNode *objList)
 {
   // TODO
+  if (objList != NULL)
+  {
+    freeObjectList(objList->next);
+    freeObject(objList->object);
+    free(objList);
+  }
 }
 
 void freeReferenceList(ObjectNode *objList)
 {
   // TODO
+  if (objList != NULL)
+  {
+    freeReferenceList(objList->next);
+    free(objList);
+  }
 }
 
 void addObject(ObjectNode **objList, Object *obj)
@@ -310,6 +324,14 @@ void addObject(ObjectNode **objList, Object *obj)
 Object *findObject(ObjectNode *objList, char *name)
 {
   // TODO
+  while (objList != NULL)
+  {
+    if (strcmp(objList->object->name, name) == 0)
+      return objList->object;
+    objList = objList->next;
+  }
+
+  return NULL;
 }
 
 /******************* others ******************************/
@@ -360,6 +382,11 @@ void cleanSymTab(void)
 
 void enterBlock(Scope *scope)
 {
+  // printf("entering block %s\n", scope->owner->name);
+  // if (symtab->currentScope != NULL)
+  // {
+  //   printf("from: %s\n", symtab->currentScope->owner->name);
+  // }
   symtab->currentScope = scope;
 }
 
@@ -387,4 +414,6 @@ void declareObject(Object *obj)
   }
 
   addObject(&(symtab->currentScope->objList), obj);
+
+  // printf("Declare: %s in %s\n", obj->name, symtab->currentScope->owner->name);
 }

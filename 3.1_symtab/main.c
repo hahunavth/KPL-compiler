@@ -48,10 +48,6 @@ int main()
 
   enterBlock(obj->funcAttrs->scope);
 
-  // printf("%p", obj->funcAttrs->scope);
-  // FIXED: (nil)Setting up watches.
-  // printf("%p", symtab->currentScope->owner);
-
   obj = createParameterObject("p1", PARAM_VALUE, symtab->currentScope->owner);
   obj->paramAttrs->type = makeIntType();
   declareObject(obj);

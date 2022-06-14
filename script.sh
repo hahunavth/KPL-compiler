@@ -19,5 +19,11 @@ while inotifywait \
     -r \
     -q \
     -e close_write **/{*.{c,kpl},**/*.kpl};\
-    do now=$(date) && clear && echo "Run: $now" && echo "=====" && $EXEC $KPL && echo "=====" && echo "Run: $now";\
+    do now=$(date) && \
+    clear && \
+    echo "Run: $now" && \
+    echo "=====" && \
+    $EXEC $KPL && \
+    echo "=====" && \
+    echo "Run: $now";\
 done
