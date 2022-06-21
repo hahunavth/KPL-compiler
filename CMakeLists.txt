@@ -26,6 +26,8 @@ set ( PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include )
 add_subdirectory(1_scanner)
 add_subdirectory(1b_scanner)
 add_subdirectory(3.1_symtab)
+add_subdirectory(3.2_symtab)
+add_subdirectory(3.3_semantic)
 # add_subdirectory(2_parser)
 
 # target_link_libraries(scanner ${PROJECT_NAME}_1_scanner)

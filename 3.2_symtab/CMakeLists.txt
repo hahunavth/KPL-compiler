@@ -7,8 +7,20 @@ project(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_library(3.2_symtab_lib STATIC debug.c symtab.c debug.h symtab.h)
-target_include_directories(3.1_symtab_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(3.2_symtab_lib STATIC
+    debug.c
+    symtab.c
+    debug.h
+    symtab.h
+    parser.c
+    charcode.c
+    error.c
+    reader.c
+    token.c
+    scanner.c
+    main.c
+)
+target_include_directories(3.2_symtab_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set_target_properties(3.2_symtab_lib PROPERTIES
     VERSION ${PROJECT_VERSION}
