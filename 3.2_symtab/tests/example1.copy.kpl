@@ -1,0 +1,26 @@
+Program Example1; (* Example 1 *)
+
+const a = 3; b = 5; c = '@'; d = -b;
+
+type int = integer; fsakdgjwed = char; asfjjd = array (.5.) of integer;
+jfjfj = array (.100.) of array (.10.) of int;
+
+VAR  A : ARRAY(. 10 .) OF int;
+     N : INTEGER;
+     CH : CHAR;
+
+FUNCTION SUM : INTEGER;
+VAR I: INTEGER;
+    S : INTEGER;
+BEGIN
+    S := 0;
+    I := 1;
+    WHILE I <= N DO
+     BEGIN
+       S := S + A(.I.);
+       I := I + 1;
+     END
+END;
+
+Begin
+End. (* Example 1 *)

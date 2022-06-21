@@ -1,0 +1,12 @@
+Program Example1; (* Example 1 *)
+Const f = 1;
+      WriteI = 1;
+Var a : integer;
+
+function hello (a: integer): Integer;
+begin
+    hello:=a;
+end;
+
+Begin
+End. (* Example 1 *)
