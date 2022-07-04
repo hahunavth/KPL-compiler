@@ -1,11 +1,24 @@
+(*
+  PROJECT 3 PHÂN TÍCH NGỮ NGHĨA
+  QUẢN LÝ PHẠM VI
+  Nộp các tệp semantics.c và parser.c
+  Hoàn thiện ví dụ trong slide 10 để gây lỗi 
+  khi lệnh return (gán cho tên hàm) lại 
+  không nằm trong phạm vi hiện hành.
+*)
 Program Example1; (* Example 1 *)
-Const f = 1;
-      WriteI = 1;
-Var a : integer;
 
-function hello (a: integer): Integer;
+var a: integer;
+
+function f (x:integer): integer;
+    (* compileBlock *)
+    function g (y:integer):integer;
+    begin
+        f := 1  (* gây lỗi khi lệnh return *)
+    end;
+    (* compileGroupSt *)
 begin
-    hello:=a;
+    (* a := g(x);  (* call fn *)
 end;
 
 Begin

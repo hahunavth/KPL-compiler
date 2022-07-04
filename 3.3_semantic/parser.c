@@ -103,7 +103,7 @@ void compileBlock2(void)
     {
       eat(TK_IDENT);
       // TODO: Check if a type identifier is fresh in the block
-        checkFreshIdent(currentToken->string);
+      checkFreshIdent(currentToken->string);
 
       // create a type object
       typeObj = createTypeObject(currentToken->string);
@@ -162,13 +162,12 @@ void compileBlock4(void)
 {
   compileSubDecls();
   compileBlock5();
-
 }
 
 void compileBlock5(void)
 {
-    eat(KW_BEGIN);
-    compileStatements();
+  eat(KW_BEGIN);
+  compileStatements();
   eat(KW_END);
 }
 
@@ -202,7 +201,7 @@ void compileFuncDecl(void)
   // parse the function's parameters
   compileParams();
   eat(SB_COLON);
-  // get the funtion's return type
+  // get the function's return type
   returnType = compileBasicType();
   funcObj->funcAttrs->returnType = returnType;
 
@@ -307,10 +306,10 @@ ConstantValue *compileConstant2(void)
   case TK_IDENT:
     eat(TK_IDENT);
     // TODO: check if the integer constant identifier is declared and get its value
-          obj = checkDeclaredIdent(currentToken->string);
-//          obj->kind == OBJ_CONSTANT;
-//          obj->constAttrs->value->intValue
-          constValue = duplicateConstantValue(obj->constAttrs->value);
+    obj = checkDeclaredIdent(currentToken->string);
+    //          obj->kind == OBJ_CONSTANT;
+    //          obj->constAttrs->value->intValue
+    constValue = duplicateConstantValue(obj->constAttrs->value);
     break;
   default:
     error(ERR_INVALID_CONSTANT, lookAhead->lineNo, lookAhead->colNo);
@@ -352,7 +351,7 @@ Type *compileType(void)
     eat(TK_IDENT);
     // TODO: check if the type identifier is declared and get its actual type
     obj = checkDeclaredType(currentToken->string);
-          type = obj->typeAttrs->actualType;
+    type = obj->typeAttrs->actualType;
 
     break;
   default:
@@ -420,7 +419,7 @@ void compileParam(void)
 
   eat(TK_IDENT);
   // TODO: check if the parameter identifier is fresh in the block
-    checkFreshIdent(currentToken->value);
+  checkFreshIdent(currentToken->value);
 
   param = createParameterObject(currentToken->string, paramKind, symtab->currentScope->owner);
   eat(SB_COLON);
@@ -434,15 +433,14 @@ void compileStatements(void)
   compileStatement();
   while (lookAhead->tokenType == SB_SEMICOLON)
   {
-      eat(SB_SEMICOLON);
+    eat(SB_SEMICOLON);
     compileStatement();
   }
 }
 
 void compileStatement(void)
 {
-
-    switch (lookAhead->tokenType)
+  switch (lookAhead->tokenType)
   {
   case TK_IDENT:
     compileAssignSt();
@@ -469,6 +467,7 @@ void compileStatement(void)
     break;
     // Error occurs
   default:
+    // printf("lookahead token: %s\n", lookAhead->string);
     error(ERR_INVALID_STATEMENT, lookAhead->lineNo, lookAhead->colNo);
     break;
   }
@@ -488,7 +487,7 @@ void compileLValue(void)
 
 void compileAssignSt(void)
 {
-    compileLValue();
+  compileLValue();
   eat(SB_ASSIGN);
   compileExpression();
 }
@@ -498,7 +497,7 @@ void compileCallSt(void)
   eat(KW_CALL);
   eat(TK_IDENT);
   // TODO: check if the identifier is a declared procedure
-    checkDeclaredProcedure(currentToken->string);
+  checkDeclaredFunction(currentToken->string);
 
   compileArguments();
 }
