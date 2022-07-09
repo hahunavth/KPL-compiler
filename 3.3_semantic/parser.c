@@ -419,7 +419,7 @@ void compileParam(void)
 
   eat(TK_IDENT);
   // TODO: check if the parameter identifier is fresh in the block
-  checkFreshIdent(currentToken->value);
+  checkFreshIdent(currentToken->string);
 
   param = createParameterObject(currentToken->string, paramKind, symtab->currentScope->owner);
   eat(SB_COLON);
@@ -497,7 +497,7 @@ void compileCallSt(void)
   eat(KW_CALL);
   eat(TK_IDENT);
   // TODO: check if the identifier is a declared procedure
-  checkDeclaredFunction(currentToken->string);
+  checkDeclaredProcedure(currentToken->string);
 
   compileArguments();
 }

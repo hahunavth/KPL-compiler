@@ -43,7 +43,7 @@ void checkFreshIdent(char *name)
   if (findObject(symtab->currentScope->objList, name) != NULL)
     error(ERR_DUPLICATE_IDENT, currentToken->lineNo, currentToken->colNo);
 
-//  printf("Check ");
+  //  printf("Check ");
 }
 
 Object *checkDeclaredIdent(char *name)
@@ -99,7 +99,7 @@ Object *checkDeclaredProcedure(char *name)
   // TODO
   Object *obj = checkDeclaredIdent(name);
   if (obj->kind != OBJ_PROCEDURE)
-    error(ERR_UNDECLARED_PROCEDURE, currentToken->lineNo, currentToken->colNo);
+    error(ERR_INVALID_PROCEDURE, currentToken->lineNo, currentToken->colNo);
   return obj;
 }
 

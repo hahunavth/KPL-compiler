@@ -4,22 +4,25 @@ VAR  I:INTEGER;
      P:INTEGER;  
      Q:INTEGER;
      C:CHAR;
-     A:ARRAY(.5.) OF ARRAY (.5.) OF CHAR;
+     A:ARRAY(.5.) OF ARRAY (.5.) OF ARRAY (.5.) OF CHAR;
 
 PROCEDURE  HANOI(N:INTEGER;  S:INTEGER;  Z:INTEGER);
 BEGIN
   IF  N != 0  THEN
     BEGIN
-      CALL  HANOI(N-1,S,6-S-Z);
       I:=I+1;  
       CALL  WRITELN;
       CALL  WRITEI(I);  
       CALL  WRITEI(N);
       CALL  WRITEI(S);  
       CALL  WRITEI(Z);
-      CALL  HANOI(N-1,6-S-Z,Z)
     END
 END;  (*END OF HANOI*)
+
+function f :integer;
+BEGIN
+  f := 1;
+END; 
 
 BEGIN
   FOR  N := 1  TO  4  DO  
@@ -38,5 +41,8 @@ BEGIN
       CALL  WRITELN  
     END;
 
-    A(.1.) := '1';
+    A(.1.)(.1.)(.1.) := '1';
+
+    I := f;
+
 END.  (* TOWER OF HANOI *)

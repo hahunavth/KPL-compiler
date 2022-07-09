@@ -571,14 +571,15 @@ void compileArgument(Object *param)
   }
   else if (param->paramAttrs->kind == PARAM_VALUE)
   {
+    duplicateConstantValue(param->paramAttrs->function->constAttrs->value);
   }
   Type *t1 = compileExpression();
-
   checkTypeEquality(t1, param->paramAttrs->type);
 }
 
 void compileArguments(ObjectNode *paramList)
 {
+  // FIXME: CHECK THUA, THIEU THAM SO
   // TODO: parse a list of arguments, check the consistency of the arguments and the given parameters
   // done
   switch (lookAhead->tokenType)
@@ -590,12 +591,15 @@ void compileArguments(ObjectNode *paramList)
 
     while (lookAhead->tokenType == SB_COMMA)
     {
+      if (currentObjectNode->next == NULL)
+        error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
       eat(SB_COMMA);
       compileArgument(currentObjectNode->object);
-      if (currentObjectNode == NULL)
-        error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
-      currentObjectNode = paramList->next;
+      currentObjectNode = currentObjectNode->next;
     }
+    if (currentObjectNode != NULL)
+      if (currentObjectNode->next != NULL)
+        error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
 
     eat(SB_RPAR);
     break;
