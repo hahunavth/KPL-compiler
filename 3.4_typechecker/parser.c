@@ -567,7 +567,7 @@ void compileArgument(Object *param)
   //       If the corresponding parameter is a reference, the argument must be a lvalue
   //  DONE
   Object* obj;
-
+  
   if (param->paramAttrs->kind == PARAM_REFERENCE)
   {
     obj = checkDeclaredLValueIdent(param->name);
@@ -591,6 +591,10 @@ void compileArguments(ObjectNode *paramList)
   case SB_LPAR:
     eat(SB_LPAR);
     ObjectNode *currentObjectNode = paramList;
+      // NOTE: FIX CORE DUMP:
+    if (currentObjectNode == NULL)
+      error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, lookAhead->lineNo, lookAhead->colNo);
+
     compileArgument(currentObjectNode->object);
 
     while (lookAhead->tokenType == SB_COMMA)
@@ -845,10 +849,10 @@ Type *compileFactor(void)
 Type *compileIndexes(Type *arrayType)
 {
   Type *t = arrayType;
-  // checkArrayType(arrayType);
   // TODO: parse a sequence of indexes, check the consistency to the arrayType, and return the element type
   while (lookAhead->tokenType == SB_LSEL)
   {
+    checkArrayType(arrayType);
     eat(SB_LSEL);
     Type *t1 = compileExpression();
     eat(SB_RSEL);

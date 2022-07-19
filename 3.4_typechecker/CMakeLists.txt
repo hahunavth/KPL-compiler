@@ -7,6 +7,8 @@ project(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
+
 add_library(3.4_typechecker_lib STATIC
     charcode.c
     debug.c
