@@ -574,8 +574,8 @@ void compileArgument(Object *param)
   }
   else if (param->paramAttrs->kind == PARAM_VALUE)
   {
-    ConstantValue *c = duplicateConstantValue(param->paramAttrs->function->constAttrs->value);
-    obj = createConstantObject(&c->charValue);
+    // ConstantValue *c = duplicateConstantValue(param->paramAttrs->function->constAttrs->value);
+    // obj = createConstantObject(&c->charValue);
   }
   Type *t1 = compileExpression();
   checkTypeEquality(t1, param->paramAttrs->type);
