@@ -12,6 +12,7 @@
 #include "semantics.h"
 #include "error.h"
 #include "debug.h"
+#include "symtab.h"
 
 Token *currentToken;
 Token *lookAhead;
@@ -565,13 +566,16 @@ void compileArgument(Object *param)
   // TODO: parse an argument, and check type consistency
   //       If the corresponding parameter is a reference, the argument must be a lvalue
   //  DONE
+  Object* obj;
+
   if (param->paramAttrs->kind == PARAM_REFERENCE)
   {
-    checkDeclaredLValueIdent(param->name);
+    obj = checkDeclaredLValueIdent(param->name);
   }
   else if (param->paramAttrs->kind == PARAM_VALUE)
   {
-    duplicateConstantValue(param->paramAttrs->function->constAttrs->value);
+    ConstantValue *c = duplicateConstantValue(param->paramAttrs->function->constAttrs->value);
+    obj = createConstantObject(&c->charValue);
   }
   Type *t1 = compileExpression();
   checkTypeEquality(t1, param->paramAttrs->type);

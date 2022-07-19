@@ -5,7 +5,7 @@ Program Example6;
    Var v1 : Integer;
        v2 : Array(. 10 .) of t1;
 
-   Function F(p1 : Integer; Var p2 : char) : Integer;
+   Function F(p1 : Integer; Var p2 : char, var i : char) : Integer;
      Begin
        f := c1;
      End;
