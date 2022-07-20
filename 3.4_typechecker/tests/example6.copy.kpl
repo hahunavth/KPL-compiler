@@ -1,7 +1,7 @@
 (*
-Sửa chương trình example6.kpl 
-khi hàm f được gọi với danh sách tham số thực sự có 3 tham số. 
-Chương trình gặp lỗi nào, tại sao?
+	Sửa chương trình example6.kpl 
+		khi hàm f được gọi với danh sách tham số thực sự có 3 tham số. 
+	Chương trình gặp lỗi nào, tại sao?
 *)
 
 Program Example6;
@@ -34,3 +34,4 @@ procedure p(v1 : integer);
 Begin
      call p(c1);
 End.
+

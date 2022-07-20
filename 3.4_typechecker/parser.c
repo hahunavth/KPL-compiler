@@ -572,11 +572,6 @@ void compileArgument(Object *param)
   {
     obj = checkDeclaredLValueIdent(param->name);
   }
-  else if (param->paramAttrs->kind == PARAM_VALUE)
-  {
-    // ConstantValue *c = duplicateConstantValue(param->paramAttrs->function->constAttrs->value);
-    // obj = createConstantObject(&c->charValue);
-  }
   Type *t1 = compileExpression();
   checkTypeEquality(t1, param->paramAttrs->type);
 }
@@ -591,7 +586,7 @@ void compileArguments(ObjectNode *paramList)
   case SB_LPAR:
     eat(SB_LPAR);
     ObjectNode *currentObjectNode = paramList;
-      // NOTE: FIX CORE DUMP:
+      // NOTE: FIX CORE DUMP: paramList can be null!
     if (currentObjectNode == NULL)
       error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, lookAhead->lineNo, lookAhead->colNo);
 
@@ -605,7 +600,7 @@ void compileArguments(ObjectNode *paramList)
       compileArgument(currentObjectNode->object);
       currentObjectNode = currentObjectNode->next;
     }
-    if (currentObjectNode != NULL)
+    // if (currentObjectNode != NULL)
       if (currentObjectNode->next != NULL)
         error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
 

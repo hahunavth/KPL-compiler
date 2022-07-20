@@ -13,3 +13,19 @@ while inotifywait -e close_write ../Test/test1.kpl ; do clear && ./parser ../Tes
 ```bash
 ./script.sh ./2c_parser_completed/b/parser 2_parser/Test/example2.copy2.kpl
 ```
+
+### Debug:
+- Set flag:
+
+  ```cmake
+  set(CMAKE_BUILD_TYPE RelWithDebInfo)
+  ```
+
+- Exec:
+
+  ```shell
+  gdb --args <executable> <args>
+
+  > run
+  > where
+  ```
