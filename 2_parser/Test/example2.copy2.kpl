@@ -1,6 +1,6 @@
 Program Example2;
 
-Const c = +a;
+Const c = ;
 Type arr = Array (.10.) of Integer;
      int = Integer;
 Var n : Integer;
@@ -11,6 +11,7 @@ Function F(n : Integer) : Integer;
   End;
  
 Begin
+  n := 1 if;
   For n := 1 To 7 Do
     Begin
       Call WriteLn;

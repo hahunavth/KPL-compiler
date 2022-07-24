@@ -207,6 +207,7 @@ void compileUnsignedConstant(void)
   }
   else
   {
+    error(ERR_INVALIDCONSTANT, lookAhead->lineNo, lookAhead->colNo);
     // error(ERR_INVALID_CONSTANT, lookAhead->lineNo, lookAhead->colNo);
   }
 }
@@ -291,6 +292,10 @@ void compileBasicType(void)
   else if (lookAhead->tokenType == KW_INTEGER)
   {
     eat(KW_INTEGER);
+  }
+  else
+  {
+    error(ERR_INVALIDBASICTYPE, lookAhead->lineNo, lookAhead->colNo);
   }
 }
 
@@ -505,27 +510,55 @@ void compileForSt(void)
 void compileArguments(void)
 {
   // TODO
-  if (lookAhead->tokenType == SB_LPAR)
+  switch (lookAhead->tokenType)
   {
+  case SB_LPAR:
     eat(SB_LPAR);
     compileExpression();
     compileArguments2();
     eat(SB_RPAR);
+    break;
+    // Check FOLLOW set
+  case SB_TIMES:
+  case SB_SLASH:
+  case SB_PLUS:
+  case SB_MINUS:
+  case KW_TO:
+  case KW_DO:
+  case SB_RPAR:
+  case SB_COMMA:
+  case SB_EQ:
+  case SB_NEQ:
+  case SB_LE:
+  case SB_LT:
+  case SB_GE:
+  case SB_GT:
+  case SB_RSEL:
+  case SB_SEMICOLON:
+  case KW_END:
+  case KW_ELSE:
+  case KW_THEN:
+    break;
+  default:
+    error(ERR_INVALIDARGUMENTS, lookAhead->lineNo, lookAhead->colNo);
   }
 }
 
 void compileArguments2(void)
 {
   // TODO
-  if (lookAhead->tokenType == SB_COMMA)
+  switch (lookAhead->tokenType)
   {
+  case SB_COMMA:
     eat(SB_COMMA);
     compileExpression();
     compileArguments2();
-  }
-  else
-  {
-    // do nothing
+    break;
+    // check the FOLLOW set
+  case SB_RPAR:
+    break;
+  default:
+    error(ERR_INVALIDARGUMENTS, lookAhead->lineNo, lookAhead->colNo);
   }
 }
 
@@ -566,8 +599,7 @@ void compileCondition2(void)
     compileExpression();
     break;
   default:
-    // do nothing
-    // error(, lookAhead->lineNo, lookAhead->colNo);
+    error(ERR_INVALIDCOMPARATOR, lookAhead->lineNo, lookAhead->colNo);
     break;
   }
 }
@@ -615,9 +647,27 @@ void compileExpression3(void)
     compileTerm();
     compileExpression3();
     break;
+    // NOTE: UNUSED
+    // check the FOLLOW set
+  // case KW_TO:
+  // case KW_DO:
+  // case SB_RPAR:
+  // case SB_COMMA:
+  // case SB_EQ:
+  // case SB_NEQ:
+  // case SB_LE:
+  // case SB_LT:
+  // case SB_GE:
+  // case SB_GT:
+  // case SB_RSEL:
+  // case SB_SEMICOLON:
+  // case KW_END:
+  // case KW_ELSE:
+  // case KW_THEN:
+  //   break;
   default:
-    // do nothing
-    break;
+    // NOTE: UNUSED, ERR_INVALIDTERM CHECKED
+    // error(ERR_INVALIDEXPRESSION, lookAhead->lineNo, lookAhead->colNo);
   }
 }
 
