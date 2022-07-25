@@ -39,7 +39,7 @@ int main()
   declareObject(obj);
 
   obj = createVariableObject("v2");
-  obj->varAttrs->type = makeArrayType(10, makeArrenterBlock(obj->progAttrs->scope); ayType(10, makeIntType()));
+  obj->varAttrs->type = makeArrayType(10, makeArrayType(10, makeIntType()));
   declareObject(obj);
 
   obj = createFunctionObject("f");

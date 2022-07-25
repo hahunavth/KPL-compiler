@@ -547,10 +547,10 @@ void compileForSt(void)
 
   // check if the identifier is a variable
   Object *v = checkDeclaredVariable(currentToken->string);
+  checkBasicType(v->varAttrs->type);
 
   eat(SB_ASSIGN);
   Type *t1 = compileExpression();
-  checkBasicType(v->varAttrs->type);
   checkTypeEquality(v->varAttrs->type, t1);
 
   eat(KW_TO);
@@ -566,8 +566,8 @@ void compileArgument(Object *param)
   // TODO: parse an argument, and check type consistency
   //       If the corresponding parameter is a reference, the argument must be a lvalue
   //  DONE
-  Object* obj;
-  
+  Object *obj;
+
   if (param->paramAttrs->kind == PARAM_REFERENCE)
   {
     obj = checkDeclaredLValueIdent(param->name);
@@ -581,12 +581,20 @@ void compileArguments(ObjectNode *paramList)
   // FIXME: CHECK THUA, THIEU THAM SO
   // TODO: parse a list of arguments, check the consistency of the arguments and the given parameters
   // done
+  // func/proc without param
+  if (lookAhead->tokenType != SB_LPAR)
+  {
+    if (paramList != NULL)
+    {
+      error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, lookAhead->lineNo, lookAhead->colNo);
+    }
+  }
   switch (lookAhead->tokenType)
   {
   case SB_LPAR:
     eat(SB_LPAR);
     ObjectNode *currentObjectNode = paramList;
-      // NOTE: FIX CORE DUMP: paramList can be null!
+    // NOTE: FIX CORE DUMP: paramList can be null!
     if (currentObjectNode == NULL)
       error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, lookAhead->lineNo, lookAhead->colNo);
 
@@ -601,8 +609,8 @@ void compileArguments(ObjectNode *paramList)
       currentObjectNode = currentObjectNode->next;
     }
     // if (currentObjectNode != NULL)
-      if (currentObjectNode->next != NULL)
-        error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+    if (currentObjectNode->next != NULL)
+      error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
 
     eat(SB_RPAR);
     break;

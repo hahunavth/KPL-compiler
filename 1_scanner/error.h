@@ -14,8 +14,8 @@ typedef enum
   ERR_INVALIDCHARCONSTANT,
   ERR_INVALIDSYMBOL,
   // REVIEW
-  ERR_INVALIDNUMVER,
-  ERR_NUMBERTOOLONG
+  // ERR_INVALIDNUMVER,
+  // ERR_NUMBERTOOLONG
 } ErrorCode;
 
 #define ERM_ENDOFCOMMENT "End of comment expected!"
@@ -23,7 +23,7 @@ typedef enum
 #define ERM_INVALIDCHARCONSTANT "Invalid const char!"
 #define ERM_INVALIDSYMBOL "Invalid symbol!"
 // REVIEW
-#define ERM_NUMBERTOOLONG "Number too long!"
+// #define ERM_NUMBERTOOLONG "Number too long!"
 
 void error(ErrorCode err, int lineNo, int colNo);
 

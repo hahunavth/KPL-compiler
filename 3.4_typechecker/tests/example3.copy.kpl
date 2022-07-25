@@ -37,7 +37,7 @@ BEGIN
   FOR  N:=2  TO  4  DO
     BEGIN  
       I:=0;  
-      CALL  HANOI(N,P,Q);  
+      CALL  HANOI(N,P);  
       CALL  WRITELN  
     END;
 

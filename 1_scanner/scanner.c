@@ -123,10 +123,10 @@ Token *readNumber(void)
 
   while (charCodes[currentChar] == CHAR_DIGIT)
   {
-    if (count > 10)
-    {
-      error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
-    }
+    // if (count > 10)
+    // {
+    //   error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
+    // }
     token->string[count] = currentChar;
     readChar();
     count++;
@@ -141,10 +141,10 @@ Token *readNumber(void)
   // printf("ITEM_STR:%s\n", token->string);
 
   // HANDLE NUMBER > INT_MAX
-  if (count == 10 && atol(token->string) > INT_MAX)
-  {
-    error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
-  }
+  // if (count == 10 && atol(token->string) > INT_MAX)
+  // {
+  //   error(ERR_NUMBERTOOLONG, token->lineNo, token->colNo);
+  // }
 
   return token;
 }
