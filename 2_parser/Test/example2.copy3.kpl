@@ -1,6 +1,6 @@
 Program Example2; (* Factorial *)
 
-(* invalid type *)
+(* invalid type*)
 Type t = ;
 
 Var n : Integer;

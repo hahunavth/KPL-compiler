@@ -561,6 +561,15 @@ void compileForSt(void)
   compileStatement();
 }
 
+// NOTE: new
+void compileRepeatSt()
+{
+  eat(KW_REPEAT);
+  compileStatements();
+  eat(KW_UNTIL);
+  compileCondition();
+}
+
 void compileArgument(Object *param)
 {
   // TODO: parse an argument, and check type consistency
